@@ -15,7 +15,13 @@
 //     }
 // });
 
-const cardsReducer = (state, action) => {
+//Action creators
+const addDeck = (name) => ({ type: 'ADD_DECK', data: name });
+const showDeck = () => ({ type: 'SHOW_ADD_DECK' });
+const hideDeck = () => ({ type: 'HIDE_ADD_DECK' });
+
+//Reducers
+const cards = (state, action) => {
     switch (action.type) {
         case 'ADD_CARD':
             let newCard = Object.assign({}, action.data, {
@@ -30,13 +36,31 @@ const cardsReducer = (state, action) => {
     }
 };
 
-const store = Redux.createStore(Redux.combineReducers({
-    cards: cardsReducer
-}));
+const decks = (state, action) => {
+    switch (action.type) {
+        case 'ADD_DECK':
+            let newDeck = { name: action.data, id: +new Date };
 
-store.subscribe(() => {
-    console.log(store.getState());
-});
+            return state.concat([newDeck]);
+
+        default:
+            return state || [];
+    }
+};
+
+const addingDeck = (state, action) => {
+    switch (action.type) {
+        case 'SHOW_ADD_DECK': return true;
+        case 'SHOW_ADD_DECK': return false;
+        default: return !!state;
+    }
+};
+
+const store = Redux.createStore(Redux.combineReducers({
+    cards,
+    decks,
+    addingDeck
+}));
 
 const App = (props) => {
     return (
@@ -46,4 +70,39 @@ const App = (props) => {
     );
 };
 
-ReactDOM.render(<App><h1>House of Cards App</h1></App>, document.getElementById('root'));
+const Sidebar = React.createClass({
+    render() {
+        let props = this.props;
+
+        return (
+            <div className='sidebar'>
+                <h2>All Decks</h2>
+                <ul>
+                    {
+                        props.decks.map((deck, i) =>
+                            <li key={i}>{deck.name}</li>
+                        )
+                    }
+                </ul>
+                { props.addingDeck ? <input ref='add' /> : false }
+            </div>
+        );
+    }
+});
+
+function run() {
+
+    let state = store.getState();
+    console.log(state);
+    ReactDOM.render(<App>
+        <Sidebar decks={state.decks} addingDeck={state.addingDeck} />
+    </App>, document.getElementById('root'));
+}
+
+store.subscribe(() => {
+    console.log(store.getState());
+});
+
+store.subscribe(run);
+
+run();

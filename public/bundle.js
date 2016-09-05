@@ -18,7 +18,19 @@
 //     }
 // });
 
-var cardsReducer = function cardsReducer(state, action) {
+//Action creators
+var addDeck = function addDeck(name) {
+    return { type: 'ADD_DECK', data: name };
+};
+var showDeck = function showDeck() {
+    return { type: 'SHOW_ADD_DECK' };
+};
+var hideDeck = function hideDeck() {
+    return { type: 'HIDE_ADD_DECK' };
+};
+
+//Reducers
+var cards = function cards(state, action) {
     switch (action.type) {
         case 'ADD_CARD':
             var newCard = Object.assign({}, action.data, {
@@ -33,13 +45,34 @@ var cardsReducer = function cardsReducer(state, action) {
     }
 };
 
-var store = Redux.createStore(Redux.combineReducers({
-    cards: cardsReducer
-}));
+var decks = function decks(state, action) {
+    switch (action.type) {
+        case 'ADD_DECK':
+            var newDeck = { name: action.data, id: +new Date() };
 
-store.subscribe(function () {
-    console.log(store.getState());
-});
+            return state.concat([newDeck]);
+
+        default:
+            return state || [];
+    }
+};
+
+var addingDeck = function addingDeck(state, action) {
+    switch (action.type) {
+        case 'SHOW_ADD_DECK':
+            return true;
+        case 'SHOW_ADD_DECK':
+            return false;
+        default:
+            return !!state;
+    }
+};
+
+var store = Redux.createStore(Redux.combineReducers({
+    cards: cards,
+    decks: decks,
+    addingDeck: addingDeck
+}));
 
 var App = function App(props) {
     return React.createElement(
@@ -49,14 +82,52 @@ var App = function App(props) {
     );
 };
 
-ReactDOM.render(React.createElement(
-    App,
-    null,
-    React.createElement(
-        'h1',
+var Sidebar = React.createClass({
+    displayName: 'Sidebar',
+    render: function render() {
+        var props = this.props;
+
+        return React.createElement(
+            'div',
+            { className: 'sidebar' },
+            React.createElement(
+                'h2',
+                null,
+                'All Decks'
+            ),
+            React.createElement(
+                'ul',
+                null,
+                props.decks.map(function (deck, i) {
+                    return React.createElement(
+                        'li',
+                        { key: i },
+                        deck.name
+                    );
+                })
+            ),
+            props.addingDeck ? React.createElement('input', { ref: 'add' }) : false
+        );
+    }
+});
+
+function run() {
+
+    var state = store.getState();
+    console.log(state);
+    ReactDOM.render(React.createElement(
+        App,
         null,
-        'House of Cards App'
-    )
-), document.getElementById('root'));
+        React.createElement(Sidebar, { decks: state.decks, addingDeck: state.addingDeck })
+    ), document.getElementById('root'));
+}
+
+store.subscribe(function () {
+    console.log(store.getState());
+});
+
+store.subscribe(run);
+
+run();
 
 },{}]},{},[1]);
