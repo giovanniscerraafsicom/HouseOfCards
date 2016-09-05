@@ -1,0 +1,29 @@
+{
+  "name": "HouseOfCards",
+  "version": "1.0.0",
+  "description": "Spaced repetition exercise with react",
+  "main": "index.js",
+  "scripts": {
+    "build": "watchify src/app.js -o public/bundle.js -t [ babelify --presets [ react es2015 ] ]",
+    "server": "live-server --port=1234 --open=public --entry-file=index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giovanniscerraafsicom/HouseOfCards.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/giovanniscerraafsicom/HouseOfCards/issues"
+  },
+  "homepage": "https://github.com/giovanniscerraafsicom/HouseOfCards#readme",
+  "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babelify": "^7.3.0",
+    "live-server": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}
