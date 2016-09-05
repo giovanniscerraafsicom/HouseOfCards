@@ -1,2 +1,5 @@
 # HouseOfCards
-Spaced repetition exercise with react
+This is just an exercise project
+to implement a spaced repetition cards app 
+using react and redux
+
