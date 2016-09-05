@@ -41,4 +41,22 @@ store.subscribe(function () {
     console.log(store.getState());
 });
 
+var App = function App(props) {
+    return React.createElement(
+        'div',
+        { className: 'app' },
+        props.children
+    );
+};
+
+ReactDOM.render(React.createElement(
+    App,
+    null,
+    React.createElement(
+        'h1',
+        null,
+        'House of Cards App'
+    )
+), document.getElementById('root'));
+
 },{}]},{},[1]);

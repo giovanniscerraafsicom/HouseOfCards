@@ -37,3 +37,13 @@ const store = Redux.createStore(Redux.combineReducers({
 store.subscribe(() => {
     console.log(store.getState());
 });
+
+const App = (props) => {
+    return (
+        <div className='app'>
+            {props.children}
+        </div>
+    );
+};
+
+ReactDOM.render(<App><h1>House of Cards App</h1></App>, document.getElementById('root'));
