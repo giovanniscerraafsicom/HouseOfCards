@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
+import {connect} from 'react-redux'
+import {addDeck, showAddDeck, hideAddDeck} from '../actions';
 
+//Presentational component
 const Sidebar = React.createClass({
     componentDidUpdate() {
         var el = ReactDOM.findDOMNode(this.refs.add);
@@ -34,4 +37,20 @@ const Sidebar = React.createClass({
     }
 });
 
-export default Sidebar;
+
+//Container component functions
+
+const mapStateToProps = ({decks, addingDeck}) => ({
+    decks,
+    addingDeck
+});
+
+const mapDispatchToProps = dispatch => ({
+    addDeck: name => dispatch(addDeck(name)),
+    showAddDeck: ()=> dispatch(showAddDeck()),
+    hideAddDeck: () => dispatch(hideAddDeck())
+});
+
+
+//Export container component
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
